@@ -22,16 +22,12 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-
       - name: Install Dependencies
         run: pip install flet requests
 
       - name: Build APK
-        run: flet build apk
+        # Команда yes | автоматически отвечает "y" (да) на любые вопросы компилятора
+        run: yes | flet build apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
