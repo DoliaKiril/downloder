@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # Фиксируем стабильную версию Linux во избежание сбоев при обновлениях серверов GitHub
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
@@ -25,16 +25,16 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # Берет актуальную стабильную версию Flutter, чтобы избежать конфликтов с Flet
+          channel: 'stable'
 
       - name: Install Dependencies
         run: pip install flet requests
 
       - name: Build APK
-        run: flet build apk --project-name kemono_dl --project-version "1.0.0"
+        run: flet build apk
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4 # Использование v4 обязательно, v3 ломается на новых серверах
+        uses: actions/upload-artifact@v4
         with:
           name: KemonoDownloader
           path: build/apk/**/*.apk
