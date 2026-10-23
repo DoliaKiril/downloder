@@ -1,22 +1,23 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch: # Позволяет запускать сборку кнопкой вручную
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # Фиксируем стабильную версию Linux во избежание сбоев при обновлениях серверов GitHub
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -24,7 +25,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          channel: 'stable' # Берет актуальную стабильную версию Flutter, чтобы избежать конфликтов с Flet
 
       - name: Install Dependencies
         run: pip install flet requests
@@ -33,7 +34,7 @@ jobs:
         run: flet build apk --project-name kemono_dl --project-version "1.0.0"
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # Использование v4 обязательно, v3 ломается на новых серверах
         with:
           name: KemonoDownloader
           path: build/apk/**/*.apk
